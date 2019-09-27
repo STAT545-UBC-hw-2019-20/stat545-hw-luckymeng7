@@ -1,0 +1,71 @@
+---
+title: "hw01_gapminder"
+author: "Xuemeng Li"
+date: "24/09/2019"
+output: 
+  html_document:
+    keep_md: true
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+This is exercise 2 in homework 1. In this exercise, we will explore gapminder dataset
+
+## Basic Usage
+
+* Source the library
+```{r}
+library(gapminder)
+library(dplyr)
+
+```
+
+* Get intro about the dataset from the R Studio: 
+
+```{r eval = FALSE, comment = NA}
+?gapminder
+```
+* Here are the headers for gapminder
+```{r}
+head(gapminder)
+```
+
+* Here is a Summary 
+```{r}
+summary(gapminder)
+```
+
+
+* Here is a graph for the average life exp for Combodia from 1950 to 2000
+```{r}
+plot(lifeExp ~ year, gapminder, subset = country == "Cambodia", type = "b")
+```
+
+## Analysis with dataset
+
+* How many unique countries does the data contain, by continent?
+```{r}
+gapminder %>%
+  group_by(continent) %>%
+  summarize(n_obs = n(), n_countries = n_distinct(country))
+```
+
+
+*By continent, which country experienced the sharpest 5-year drop in life expectancy and what was the drop?
+
+```{r}
+gapminder %>%
+  group_by(continent, country) %>%
+  select(country, year, continent, lifeExp) %>%
+  mutate(le_delta = lifeExp - lag(lifeExp)) %>%
+  summarize(worst_le_delta = min(le_delta, na.rm = TRUE)) %>%
+  filter(min_rank(worst_le_delta) < 2) %>%
+  arrange(worst_le_delta)
+
+```
+

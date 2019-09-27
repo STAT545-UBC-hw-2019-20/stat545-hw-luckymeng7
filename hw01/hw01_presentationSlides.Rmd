@@ -1,0 +1,69 @@
+---
+title: "hw01_presentationSlides"
+author: "Xuemeng Li"
+date: "26/09/2019"
+output:
+  ioslides_presentation:
+    keep_md: yes
+  beamer_presentation: default
+font_adjustment: -2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+This is exercise 3 in homework 1. In this exercise, we will present the exploration of gapminder in slides
+
+## Basic Usage
+
+- Source the library
+
+```{r message=FALSE}
+library(gapminder)
+library(dplyr)
+
+```
+- Intro from the R Studio: 
+
+```{r eval = FALSE, comment = NA}
+?gapminder
+```
+
+## Basic Usage (2)
+* Headers for gapminder
+```{r }
+head(gapminder)
+```
+
+## Here is a Summary 
+```{r}
+summary(gapminder)
+```
+
+## Here is a graph for the average life exp for Combodia from 1950 to 2000
+```{r}
+plot(lifeExp ~ year, gapminder, subset = country == "Cambodia", type = "b")
+```
+
+## Analysis with dataset
+- How many unique countries does the data contain, by continent?
+```{r}
+gapminder %>%
+  group_by(continent) %>%
+  summarize(n_obs = n(), n_countries = n_distinct(country))
+```
+
+## Analysis with dataset (2)
+- By continent, which country experienced the sharpest 5-year drop in life expectancy and what was the drop?
+
+```{r echo = FALSE}
+gapminder %>%
+  group_by(continent, country) %>%
+  select(country, year, continent, lifeExp) %>%
+  mutate(le_delta = lifeExp - lag(lifeExp)) %>%
+  summarize(worst_le_delta = min(le_delta, na.rm = TRUE)) %>%
+  filter(min_rank(worst_le_delta) < 2) %>%
+  arrange(worst_le_delta)
