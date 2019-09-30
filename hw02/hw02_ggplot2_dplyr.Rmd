@@ -4,7 +4,6 @@ author: "Xuemeng Li"
 date: "27/09/2019"
 output: 
   html_document:
-    keep_md: true
     toc: true
 
 ---
