@@ -4,7 +4,6 @@ author: "Xuemeng Li"
 date: "26/09/2019"
 output:
   ioslides_presentation:
-    keep_md: yes
   beamer_presentation: default
 font_adjustment: -2
 ---
