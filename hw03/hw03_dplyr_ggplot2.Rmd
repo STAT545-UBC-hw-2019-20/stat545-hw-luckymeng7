@@ -2,9 +2,11 @@
 title: "hw03_dplyr_ggplot2"
 author: "Xuemeng Li"
 date: "29/09/2019"
-output: 
+output:
+  pdf_document:
+    toc: yes
   html_document:
-    toc: true
+    toc: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -14,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Overview
 The goal is to manipulate and explore a dataset with the dplyr package, complemented by visualizations made with ggplot2. 
 
-```{r}
+```{r, message=FALSE}
 library(gapminder)
 library(tidyverse)
 library(gridExtra)
