@@ -4,6 +4,8 @@
 
 This is the Repo for **[STAT545](https://stat545.stat.ubc.ca/)** assignments at UBC. Each assignment would be packed in individual folders. 
 
+[Repo Link](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-luckymeng7/)
+
 ## About me
 
 Hello, I'm Xuemeng Li, a master of engineering in ECE **student** in UBC as well as a system validation **engineer** for a hardware company. I'm passionate about robotics and data analysis. I'm open to any related opportunities. 
