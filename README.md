@@ -5,6 +5,10 @@
 This is the Repo for **[STAT545](https://stat545.stat.ubc.ca/)** assignments at UBC. Each assignment would be packed in individual folders. 
 
 [Repo Link](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-luckymeng7/)
+[HW 01](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-luckymeng7/hw01/hw01_gapminder.html)
+[HW 02](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-luckymeng7/hw02/hw02_ggplot2_dplyr.html)
+[HW 03](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-luckymeng7/hw03/hw03_dplyr_ggplot2.html)
+[HW 04](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-luckymeng7/hw04/hw04_Tidy_Data_and_Joins.html)
 
 ## About me
 
