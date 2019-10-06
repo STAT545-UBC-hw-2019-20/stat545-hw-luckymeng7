@@ -1,0 +1,21 @@
+---
+title: "hw04_Tidy_data_and_Joins"
+author: "Xuemeng Li"
+date: "06/10/2019"
+output: 
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview
+The goal of this homework is to solidify data wrangling skills by working some realisic problems in the grey area between data aggreagation and data reshaping
+
+# Exercise 1: Univariate Data Reshaping 
+
+# Exercise 2: Multivariate Data Reshaping
+
+# Exercise 3: Table Joins
