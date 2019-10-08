@@ -11,11 +11,129 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r, message=FALSE}
+library(gapminder)
+library(tidyverse)
+```
+
 # Overview
 The goal of this homework is to solidify data wrangling skills by working some realisic problems in the grey area between data aggreagation and data reshaping
 
-# Exercise 1: Univariate Data Reshaping 
+# Exercise 1: Univariate Data Reshaping - Univraiate Option 1
 
-# Exercise 2: Multivariate Data Reshaping
+## 1. Data in wider format 
+Make a tibble with one row per year, and columns for life expectancy for two or more countries. Countries are selected for canada, China and Afghanistan
+```{r}
+LifeExp1 <- gapminder %>%
+  select(year, lifeExp, country) %>%
+  filter(country == "Canada" | country == "China" | country == "Afghanistan") %>%
+  pivot_wider (id_col = year,
+               names_from = country,
+               values_from = lifeExp
+                 )
+DT::datatable(LifeExp1)
+```
+
+
+## 2. Plot of the wide data
+Take advantage of this new data shape to scatterplot life expectancy for one country against that of another.
+```{r}
+LifeExp1 %>%
+  ggplot (aes(x=China, y=Canada)) +
+  geom_point(color = "red", size = 2) +
+  labs (title = "Life expectancy of Canada vs China in 1952-2007", x = "China (Age/Years)", y = "Canada (Age/Years)")
+  
+
+  
+```
+
+
+## 3. Re-lengthening the wider data
+```{r}
+LifeExp1 %>%
+  pivot_longer(col = -year,
+              names_to = "Countries",
+              values_to = "lifeExp"
+               ) %>%
+  DT::datatable()
+```
+
+
+# Exercise 2: Multivariate Data Reshaping - Multivariate Option 1
+## 1. Putting data in wider format
+Make a tibble with one row per year, and columns for life expectancy and GDP per capita (or two other numeric variables) for two or more countries.
+```{r}
+LifeExp2 <- gapminder %>%
+  select (year, lifeExp, gdpPercap, country) %>%
+  filter(country == "Canada" | country == "China" | country == "Afghanistan") %>%
+  pivot_wider (id_cols = c(year,country),
+              names_from = "country",
+              names_sep = " ",
+              values_from = c(gdpPercap, lifeExp)
+              )
+
+DT::datatable(LifeExp2)
+```
+
+## 2. Re-lengthening the data
+
+```{r}
+LifeExp2 %>%
+  pivot_longer (cols = -year,
+                names_sep = " ",
+                names_to = c(".value", "country")
+                  )%>%
+  DT::datatable()
+```
 
 # Exercise 3: Table Joins
+
+```{r}
+guest <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/attend.csv")
+email <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/emails.csv")
+```
+
+## Practice 1
+**For each guest in the guestlist (guest tibble), add a column for email address, which can be found in the email tibble.**
+
+```{r}
+guest
+```
+
+```{r}
+email
+```
+
+
+```{r}
+emailList <- email %>%
+  separate_rows(guest, sep = ", ")
+
+guest %>%
+  left_join (emailList, by = c("name" = "guest")) %>%
+  DT::datatable()
+```
+
+
+## Practice 2
+**3.2 Who do we have emails for, yet are not on the guestlist?**
+
+```{r}
+emailList <- email %>%
+  separate_rows(guest, sep = ", ")
+
+guest %>%
+  anti_join(emailList, by = c("name" = "guest")) %>%
+  select (name) %>%
+  DT::datatable()
+```
+
+## Practice 3
+**3.3 Make a guestlist that includes everyone we have emails for (in addition to those on the original guestlist).**
+
+```{r}
+guest %>%
+  full_join(emailList, by = c("name" = "guest")) %>%
+  select (name, email) %>%
+  DT::datatable()
+```
