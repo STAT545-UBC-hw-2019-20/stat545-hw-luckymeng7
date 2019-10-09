@@ -89,10 +89,17 @@ LifeExp2 %>%
 
 # Exercise 3: Table Joins
 
-```{r}
+**Here are two tables we are using for Joins practice**
+
+```{r, message=FALSE}
 guest <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/attend.csv")
 email <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/emails.csv")
+
+DT::datatable(guest)
+DT::datatable(email)
 ```
+
+
 
 ## Practice 1
 **For each guest in the guestlist (guest tibble), add a column for email address, which can be found in the email tibble.**
