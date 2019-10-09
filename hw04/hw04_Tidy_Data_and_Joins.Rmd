@@ -1,10 +1,11 @@
 ---
-title: "hw04_Tidy_data_and_Joins"
+title: 'Assignment 4: Tidy data and Joins'
 author: "Xuemeng Li"
 date: "06/10/2019"
-output: 
+output:
   html_document:
-    toc: true
+    df_print: paged
+    toc: yes
 ---
 
 ```{r setup, include=FALSE}
