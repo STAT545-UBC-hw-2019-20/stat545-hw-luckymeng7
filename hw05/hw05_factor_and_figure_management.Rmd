@@ -199,8 +199,6 @@ Plot_1 <- ggplot(gapminder, aes(x = continent, y = gdpPercap)) +
   theme_bw() +
   geom_jitter(position = position_jitter(width = 0.1, height = 0), alpha = 1/4)
 
-plot_final <- grid.arrange(Plot_1, Plot_2, nrow = 2)
-
-ggsave("gdpPercap_vs_Continent.png", plot = plot_final, dpi = 500)
+ggsave("gdpPercap_vs_Continent.png", plot = grid.arrange(Plot_1, Plot_2, nrow = 2), dpi = 500)
 ```
-![The embeded image](hw05/gdpPercap_vs_Continent.png)
+![Above is the embeded image](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-luckymeng7/hw05/gdpPercap_vs_Continent.png)
