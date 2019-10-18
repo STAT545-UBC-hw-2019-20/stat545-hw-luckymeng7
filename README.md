@@ -16,6 +16,8 @@ Homework Links:
 
 * [HW 04](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-luckymeng7/hw04/hw04_Tidy_Data_and_Joins.html)
 
+* [HW 05](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-luckymeng7/hw05/hw05_factor_and_figure_management.html)
+
 ## About me
 
 Hello, I'm Xuemeng Li, a master of engineering in ECE **student** in UBC as well as a system validation **engineer** for a hardware company. I'm passionate about robotics and data analysis. I'm open to any related opportunities. 
