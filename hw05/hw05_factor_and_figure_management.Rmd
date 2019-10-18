@@ -1,0 +1,206 @@
+---
+title: 'Assignment 5: Factor and Figure Management'
+author: "Xuemeng Li"
+date: "14/10/2019"
+output: 
+  html_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE}
+library(tidyverse)
+library(gapminder)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(gridExtra)
+```
+
+
+# Exercise 1: Explain the value of the here::here package
+
+Task: In your own words, summarize the value of the here::here package in 250 words or fewer.
+
+There are three main benefit of the here::here package. First, here package use robust file path and avoid using absolute path. This would allow others to open the R project without checking the path. Second, here package create the path for user to avoid the issues caused by different operating system. Last but not least, here package would keep code clean by avoiding relative directory. With here, the files opened outside project would still run. 
+
+
+```{r}
+library(here)
+here()
+```
+
+
+# Exercise 2: Factor management 
+
+Task: Choose one dataset (of your choice) and a variable to explore. After ensuring the variable(s) you’re exploring are indeed factors, you should:
+1. Drop factor / levels;
+2. Reorder levels based on knowledge from data.
+
+Elaboration for the gapminder data set
+```{r}
+
+gapminder$continent %>%
+  class()
+
+
+```
+1. **Drop Oceania**. Filter the Gapminder data to remove observations associated with the continent of Oceania. Additionally, remove unused factor levels. Provide concrete information on the data before and after removing these rows and Oceania; address the number of rows and the levels of the affected factors.
+
+```{r}
+# Before Dropping Oceania
+gapminder %>% 
+  nrow () 
+gapminder$continent %>% 
+  nlevels () 
+gapminder$continent %>% 
+  levels () 
+
+# Drop Oceania
+gap_NoOceania <- gapminder %>%
+  filter(continent != "Oceania")
+
+gap_NoOceania %>% 
+  nrow () 
+gap_NoOceania$continent %>% 
+  nlevels () # There are stil 5 levels
+gap_NoOceania$continent %>% 
+  levels () 
+
+# Drop levels
+gap_dropped_Oceania <- gap_NoOceania %>%
+  droplevels()
+
+gap_dropped_Oceania %>% 
+  nrow () 
+
+gap_dropped_Oceania$continent %>% 
+  nlevels ()
+gap_dropped_Oceania$continent %>% 
+  levels () 
+```
+
+
+2. **Reorder the levels of country or continent.** Use the forcats package to change the order of the factor levels, based on summarized information of one of the quantitative variables. Consider experimenting with a summary statistic beyond the most basic choice of the mean/median. Use the forcats package in the tidyverse for this, rather than the baseR function as.factor.
+
+Without ordering
+```{r}
+gap_dropped_Oceania %>%
+  ggplot() +
+  geom_bar(aes(continent)) +
+  coord_flip()+
+  theme_bw() +
+  xlab("Continent")+ylab("Number of entries") 
+```
+
+
+Ordering the countinent by **max** life expectancy 
+```{r}
+gap_dropped_Oceania %>%
+  ggplot() +
+  geom_bar(aes(fct_reorder(continent, lifeExp, max))) +
+  coord_flip()+
+  theme_bw() +
+  xlab("Continent")+ylab("Number of entries") 
+
+```
+
+
+Ordering the countinent by median gdpPercap
+```{r}
+##  default summarizing function is median()
+gap_dropped_Oceania %>%
+  ggplot() +
+  geom_bar(aes(fct_reorder(continent, gdpPercap))) +
+  coord_flip()+
+  theme_bw() +
+  xlab("Continent")+ylab("Number of entries") 
+```
+
+
+Other features in forcats package:
+```{r}
+## fct_lump would lump together least/most comman factor levels into "other"
+?fct_lump
+
+gap_dropped_Oceania %>%
+  ggplot() +
+  geom_bar(aes(fct_lump(continent, n=2))) +
+  coord_flip()+
+  theme_bw() +
+  xlab("Continent")+ylab("Number of entries") 
+
+```
+
+# Exercise 3: File input/output (I/O)
+
+1. Export dataset to disk
+
+```{r}
+gap_Asia <- gapminder %>%
+  filter (continent == "Asia")
+
+write_csv(gap_Asia, here::here("hw05", "gap_Asia.csv"))
+
+```
+
+2. Read back the dataset that exported above，it survived the round trip and could be ordered with factors. I also use the read back data plot a graph comparing the lifeExp change along years for countries in Asia
+```{r}
+gap_Asia_file = here("hw05", "gap_Asia.csv")
+gap_Asia_r <- read_csv(gap_Asia_file)
+
+ggplot(gap_Asia_r, aes(x = year, y = lifeExp,
+                  color = fct_reorder2(country, year, lifeExp))) +
+  geom_line() +
+  labs(color = "country")
+```
+
+# Exercise 4: Visualization design
+Task: Create a side-by-side plot and juxtapose your first attempt (show the original figure as-is) with a revised attempt after some time spent working on it and implementing principles of effective plotting principles. Comment and reflect on the differences.
+
+Here is the 
+```{r}
+Plot_1 <- ggplot(gapminder, aes(x = continent, y = gdpPercap)) +
+  scale_y_log10() +
+  theme_bw() +
+  geom_jitter(position = position_jitter(width = 0.1, height = 0), alpha = 1/4)
+
+Plot_2 <- gapminder %>%
+  ggplot( aes(fct_reorder(continent, gdpPercap), gdpPercap, fill = continent)) +
+  geom_boxplot(aes(alpha = 0.2)) +
+  geom_hline(aes(yintercept=mean(gdpPercap)),color="black", linetype="dashed", size=1)+
+  geom_jitter(position = position_jitter(width = 0.1, height = 0), alpha = 0.1)+
+  scale_y_log10() +
+  theme_bw() +
+  xlab("Continent")+ylab("gdpPercap") 
+
+grid.arrange(Plot_1, Plot_2, nrow = 2)
+```
+
+
+
+# Exercise 5: Writing figures to file 
+
+```{r}
+Plot_2 <- gapminder %>%
+  ggplot( aes(fct_reorder(continent, gdpPercap), gdpPercap, fill = continent)) +
+  geom_boxplot(aes(alpha = 0.2)) +
+  geom_hline(aes(yintercept=mean(gdpPercap)),color="black", linetype="dashed", size=1)+
+  geom_jitter(position = position_jitter(width = 0.1, height = 0), alpha = 0.1)+
+  scale_y_log10() +
+  theme_bw() +
+  xlab("Continent")+ylab("gdpPercap") 
+
+Plot_1 <- ggplot(gapminder, aes(x = continent, y = gdpPercap)) +
+  scale_y_log10() +
+  theme_bw() +
+  geom_jitter(position = position_jitter(width = 0.1, height = 0), alpha = 1/4)
+
+plot_final <- grid.arrange(Plot_1, Plot_2, nrow = 2)
+
+ggsave("gdpPercap_vs_Continent.png", plot = plot_final, dpi = 500)
+```
+![The embeded image](hw05/gdpPercap_vs_Continent.png)
